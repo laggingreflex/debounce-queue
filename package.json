@@ -1,0 +1,9 @@
+{
+  "name": "debounce-queue",
+  "version": "0.0.0",
+  "description": "Like lodash.debounce but you get an array of all previous (unique) events",
+  "main": "index.js",
+  "repository": "laggingreflex/debounce-queue",
+  "author": "laggingreflex@gmail.com",
+  "license": "ISC"
+}

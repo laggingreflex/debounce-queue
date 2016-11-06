@@ -30,6 +30,7 @@ module.exports = function debounceQueue( fn, delay, opts ) {
     }
     if ( new Date( time + maxWait ) < new Date() ) {
       setNextTimer();
+      time = new Date();
     }
   }
 
@@ -52,8 +53,8 @@ module.exports = function debounceQueue( fn, delay, opts ) {
   let timer;
   debounced.clearTimeout = () => {
     if ( !timer ) return;
-      clearTimeout(timer);
-      timer = null;
+    clearTimeout(timer);
+    timer = null;
   };
   function setNextTimer() {
     debounced.clearTimeout();

@@ -21,10 +21,10 @@ module.exports = function debounceQueue( fn, delay, opts ) {
   function debounced( data ) {
     const ret = enqueue( data, queue.slice() );
     if ( !( ret instanceof Array ) ) {
-      throw new Error( 'opts.enqueue must return the modified queue array' );
+      throw new Error( 'opts.enqueue must return a modified queue array' );
     } else {
       // if (ret.length < queue.length) {
-      //   console.warn('WARNING: the returned queue has fewer items than the original');
+      //   console.warn('WARNING: Returned queue has fewer items than the original');
       // }
       queue = ret;
     }
@@ -51,10 +51,9 @@ module.exports = function debounceQueue( fn, delay, opts ) {
 
   let timer;
   debounced.clearTimeout = () => {
-    if ( timer ) {
+    if ( !timer ) return;
       clearTimeout(timer);
       timer = null;
-    }
   };
   function setNextTimer() {
     debounced.clearTimeout();

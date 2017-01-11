@@ -23,18 +23,16 @@ watch('.')
 
 ```
 
-You can customize which items get enqueued (this is the default):
+You can customize which items get enqueued:
 
 ```js
-function enqueue( data, queue ) {
-  if ( queue.indexOf( data ) === -1 ) {
-    queue.push( data )
-  }
-  return queue;
-}
-
 const debounced = debounce(onChange, 1000, {
-  enqueue: enqueue
+  enqueue( data, queue, defaultEnqueue ) {
+    if ( queue.indexOf( data ) === -1 ) {
+      queue.push( data )
+    }
+    return queue;
+  }
 });
 ```
 
@@ -48,6 +46,6 @@ function onChange(files) {
   return Promise.map(files, () => {
     return Promise.delay(1000);
   });
-  // Next onChange will fire after (delay+(n(files)*1000))ms
+  // Next onChange will fire after `delay + files.length * 1000` ms
 }
 ```

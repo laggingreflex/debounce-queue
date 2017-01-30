@@ -36,6 +36,14 @@ const debounced = debounce(onChange, 1000, {
 });
 ```
 
+## Options
+
+### `sleep` (boolean) (default: false)
+
+Sleeps while callback is being awaited. Helps prevent feedback loop when a process modifies files in the same path it's watching for changes.
+
+Be sure to return a promise in your callback.
+
 ## Extras
 
 ### Promise support

@@ -14,6 +14,7 @@ module.exports = function debounceQueue(callback, delay, opts) {
   delay = delay || 100;
 
   let queue = [];
+  let sleeping = false;
 
   const enqueue = opts.enqueue || defaultEnqueue;
 
@@ -21,6 +22,7 @@ module.exports = function debounceQueue(callback, delay, opts) {
   let time = new Date();
 
   function debounced(data) {
+    if (sleeping) return;
     const queueCopy = queue.slice()
     const ret = enqueue(data, queueCopy, (_data = data, queue = queueCopy) => defaultEnqueue(_data, queue));
     if (!(ret instanceof Array)) {
@@ -43,12 +45,19 @@ module.exports = function debounceQueue(callback, delay, opts) {
 
     let ret;
     if (flush.length) {
+      if (opts.sleep) {
+        sleeping = true;
+      }
       ret = callback(flush);
     }
 
     if (ret && ret.then) {
-      ret.then(setNextTimer);
+      ret.then(() => {
+        sleeping = false;
+        setNextTimer();
+      });
     } else {
+      sleeping = false;
       setNextTimer();
     }
 

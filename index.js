@@ -54,11 +54,9 @@ module.exports = function debounceQueue(callback, delay, opts) {
     if (ret && ret.then) {
       ret.then(() => {
         sleeping = false;
-        setNextTimer();
       });
     } else {
       sleeping = false;
-      setNextTimer();
     }
 
     return ret

@@ -1,17 +1,15 @@
 const defaultEnqueue = require('./enqueue');
 
-module.exports = function debounceQueue(callback, delay, opts) {
+module.exports = function debounceQueue(callback, opts = {}) {
   if (typeof callback !== 'function') {
     throw new Error('Required: the function to debounce');
   }
 
-  if (typeof delay !== 'number' && !opts) {
-    opts = delay
-    delay = opts.delay
+  if (typeof opts === 'number') {
+    opts = { delay: opts };
   }
 
-  opts = opts || {};
-  delay = delay || 100;
+  const delay = opts.delay = opts.delay || 100;
 
   let queue = [];
   let sleeping = false;

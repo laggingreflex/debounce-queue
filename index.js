@@ -1,5 +1,3 @@
-const defaultEnqueue = require('./enqueue');
-
 module.exports = function debounceQueue(callback, opts = {}) {
   if (typeof callback !== 'function') {
     throw new Error('Required: the function to debounce');
@@ -14,23 +12,12 @@ module.exports = function debounceQueue(callback, opts = {}) {
   let queue = [];
   let sleeping = false;
 
-  const enqueue = opts.enqueue || defaultEnqueue;
-
   const maxWait = opts.maxWait || (delay + 2000);
   let time = new Date();
 
-  function debounced(data) {
+  function debounced(...args) {
     if (sleeping) return;
-    const queueCopy = queue.slice()
-    const ret = enqueue(data, queueCopy, (_data = data, queue = queueCopy) => defaultEnqueue(_data, queue));
-    if (!(ret instanceof Array)) {
-      throw new Error('opts.enqueue must return a modified queue array');
-    } else {
-      // if (ret.length < queue.length) {
-      //   console.warn('WARNING: Returned queue has fewer items than the original');
-      // }
-      queue = ret;
-    }
+    queue.push(args);
     if (new Date(time + maxWait) < new Date()) {
       setNextTimer();
       time = new Date();

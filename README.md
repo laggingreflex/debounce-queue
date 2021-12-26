@@ -2,58 +2,40 @@
 
 [![npm](https://img.shields.io/npm/v/debounce-queue.svg)](https://www.npmjs.com/package/debounce-queue)
 
-Like [`lodash.debounce`][1] but you get an array of all previous (unique) events instead of just the last/first one.
+[Debounce] that gives you an array of **all** previous events instead of just the last one.
 
-[1]: https://lodash.com/docs/4.16.6#debounce
+[debounce]: https://lodash.com/docs/4.16.6#debounce
 
-## Example
+## Install
 
-```js
-import {watch} from 'chokidar';
-import debounce from 'debounce-queue';
-
-function onChange(files) {
-  // files is now an array of (unique) files that were changed since (t-1000)ms
-}
-
-const debounced = debounce(onChange, 1000);
-
-watch('.')
-  .on('change', debounced)
-
+```sh
+npm install debounce-queue --save
 ```
 
-You can customize which items get enqueued:
+## Usage
+
+### Example
 
 ```js
-const debounced = debounce(onChange, 1000, {
-  enqueue( data, queue, defaultEnqueue ) {
-    if ( queue.indexOf( data ) === -1 ) {
-      queue.push( data )
-    }
-    return queue;
+import { watch } from 'fs'
+import debounce from 'debounce-queue'
+
+watch('.', debounce(list => {
+  for(const [eventType, filename] of list) {
+    ...
   }
-});
+}))
 ```
 
-## Options
+### API
 
-### `sleep` (boolean) (default: false)
-
-Sleeps while callback is being awaited. Helps prevent feedback loop when a process modifies files in the same path it's watching for changes.
-
-Be sure to return a promise in your callback.
-
-## Extras
-
-### Promise support
-
-Your debounced function can return a promise
 ```js
-function onChange(files) {
-  return Promise.map(files, () => {
-    return Promise.delay(1000);
-  });
-  // Next onChange will fire after `delay + files.length * 1000` ms
-}
+debounce(func, opts)
 ```
+
+* **`func`** `<function>(required)` The function to debounce
+* **`opts`** `[number|object]` Options or wait
+* **`opts.wait`** `[number=0]` The number of milliseconds to delay
+* **`opts.leading`** `[boolean=false]` Specify invoking on the leading edge of the timeout.
+* **`opts.maxWait`** `[number]` The maximum time func is allowed to be delayed before it's invoked.
+* **`opts.trailing`** `[boolean=true]` Specify invoking on the trailing edge of the timeout.

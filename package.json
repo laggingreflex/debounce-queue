@@ -2,5 +2,11 @@
   "name": "debounce-queue",
   "version": "0.3.1",
   "description": "Like lodash.debounce but you get an array of all previous (unique) events",
-  "repository": "laggingreflex/debounce-queue"
+  "repository": "laggingreflex/debounce-queue",
+  "scripts": {
+    "test": "mocha --timeout=5000"
+  },
+  "devDependencies": {
+    "mocha": "^9.1.3"
+  }
 }
